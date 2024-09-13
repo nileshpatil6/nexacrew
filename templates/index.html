@@ -1,0 +1,63 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF QA System</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <header>
+        <h1>PDF QA System</h1>
+        <p>Upload your PDF and ask questions to get precise answers.</p>
+    </header>
+    <main>
+        <section id="upload-section">
+            <h2>Upload PDF</h2>
+            <form id="upload-form" enctype="multipart/form-data">
+                <input type="file" id="pdf" name="pdf" accept=".pdf" required>
+                <button type="submit">Upload PDF</button>
+            </form>
+        </section>
+        <section id="ask-section">
+            <h2>Ask a Question</h2>
+            <form id="ask-form">
+                <input type="text" id="question" name="question" placeholder="Type your question here..." required>
+                <button type="submit">Submit Question</button>
+            </form>
+        </section>
+        <section id="response-section">
+            <h2>Response</h2>
+            <p id="answer"></p>
+        </section>
+    </main>
+    <script>
+        document.getElementById('upload-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => alert(data.message || data.error))
+            .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('ask-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            fetch('/ask', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => document.getElementById('answer').innerText = data.answer || data.error)
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
