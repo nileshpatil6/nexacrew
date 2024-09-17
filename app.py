@@ -520,7 +520,7 @@ def ask_question():
         return jsonify({'error': f'Error generating content: {str(e)}'}), 500
     
     return jsonify({'answer': answer.text})
-
 if __name__ == '__main__':
-    app.secret_key = os.urandom(24)  # Ensure secret key is secure for production
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))  # Get the port from the environment variable or use 5000 by default
+    app.secret_key = os.getenv('SECRET_KEY', os.urandom(24))  # Get secret key from environment variable or generate one
+    app.run(host='0.0.0.0', port=port, debug=False)  # Set host and port for production deployment
